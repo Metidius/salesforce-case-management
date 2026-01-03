@@ -17,12 +17,12 @@
             <value>
                 <fullName>CustomerContacted</fullName>
                 <default>false</default>
-                <label>CustomerContacted</label>
+                <label>Customer Contacted</label>
             </value>
             <value>
                 <fullName>InternalInvestigation</fullName>
                 <default>false</default>
-                <label>InternalInvestigation</label>
+                <label>Internal Investigation</label>
             </value>
             <value>
                 <fullName>Escalation</fullName>
