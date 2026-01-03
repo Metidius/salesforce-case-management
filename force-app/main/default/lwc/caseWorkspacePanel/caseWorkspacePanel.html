@@ -1,0 +1,132 @@
+<template>
+  <lightning-card title="Case Workspace" icon-name="standard:case">
+    <div class="slds-p-horizontal_medium slds-p-bottom_medium">
+      <template if:true={isLoading}>
+        <lightning-spinner alternative-text="Loading" size="small"></lightning-spinner>
+      </template>
+
+      <template if:true={error}>
+        <div class="slds-text-color_error slds-m-bottom_small">
+          {error.body.message}
+        </div>
+      </template>
+
+      <template if:true={data}>
+        <!-- Header -->
+        <div class="slds-grid slds-wrap slds-m-bottom_small slds-align_absolute-center">
+          <div class="slds-col slds-size_1-of-1 slds-m-bottom_x-small">
+            <div class="slds-text-heading_small">
+              Case {caseInfo.caseNumber} — {caseInfo.subject}
+            </div>
+          </div>
+
+          <div class="slds-col slds-size_1-of-1 slds-grid slds-wrap slds-gutters_small">
+            <div class="slds-col slds-size_1-of-2">
+              <div class="meta-line"><span class="meta-label">Owner:</span> {caseInfo.ownerName}</div>
+              <div class="meta-line"><span class="meta-label">Account:</span> {caseInfo.accountName}</div>
+            </div>
+
+            <div class="slds-col slds-size_1-of-2">
+              <div class="meta-line"><span class="meta-label">Status:</span> {caseInfo.status}</div>
+              <div class="meta-line slds-grid slds-grid_vertical-align-center">
+                <span class="meta-label">Priority:</span>
+                <lightning-badge class="slds-m-left_x-small" label={caseInfo.priority}></lightning-badge>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="slds-m-bottom_medium slds-grid slds-wrap slds-gutters_small">
+          <div class="slds-col">
+            <lightning-button variant="brand" label="Add Update" onclick={openAddUpdate}></lightning-button>
+          </div>
+          <div class="slds-col">
+            <lightning-button variant="neutral" label="Mark Reviewed" onclick={handleMarkReviewed}></lightning-button>
+          </div>
+          <div class="slds-col">
+            <lightning-button variant="destructive" label="Escalate" onclick={openEscalate}></lightning-button>
+          </div>
+        </div>
+
+        <!-- Customer Context -->
+        <div class="slds-box slds-theme_default slds-m-bottom_medium">
+          <div class="slds-text-title_bold slds-m-bottom_x-small">Customer Context</div>
+
+          <template if:true={hasContext}>
+            <div class="slds-grid slds-wrap slds-gutters_small">
+              <div class="slds-col slds-size_1-of-2">
+                <div class="meta-line"><span class="meta-label">Tier:</span> {context.customerTier}</div>
+                <div class="meta-line"><span class="meta-label">SLA:</span> {context.supportSla}</div>
+              </div>
+              <div class="slds-col slds-size_1-of-2">
+                <div class="meta-line">
+                  <span class="meta-label">Risk Flag:</span>
+                  <template if:true={context.riskFlag}>
+                    <lightning-badge class="slds-m-left_x-small" label="Yes"></lightning-badge>
+                  </template>
+                  <template if:false={context.riskFlag}>
+                    <span class="slds-m-left_x-small">No</span>
+                  </template>
+                </div>
+                <div class="meta-line"><span class="meta-label">Last Reviewed:</span> {context.lastReviewed}</div>
+                <div class="meta-line"><span class="meta-label">Reviewed By:</span> {context.reviewedByName}</div>
+              </div>
+              <div class="slds-col slds-size_1-of-1 slds-m-top_small">
+                <div class="meta-line"><span class="meta-label">Risk Notes:</span> {context.riskNotes}</div>
+              </div>
+            </div>
+          </template>
+
+          <template if:false={hasContext}>
+            <div class="slds-text-color_weak">No customer context found for this case.</div>
+          </template>
+        </div>
+
+        <!-- Recent Updates -->
+        <div class="slds-box slds-theme_default">
+          <div class="slds-text-title_bold slds-m-bottom_x-small">Recent Updates</div>
+
+          <template if:true={hasUpdates}>
+            <ul class="slds-has-dividers_top-space">
+              <template for:each={updates} for:item="u">
+                <li key={u.id} class="slds-item slds-p-vertical_small">
+                  <div class="slds-grid slds-wrap slds-gutters_x-small">
+                    <div class="slds-col slds-size_1-of-1 slds-grid slds-grid_align-spread">
+                      <div class="slds-text-title_bold">{u.updateType}</div>
+                      <div class="slds-text-color_weak">{u.createdDate}</div>
+                    </div>
+                    <div class="slds-col slds-size_1-of-1 slds-m-top_x-small">
+                      <div>{u.summary}</div>
+                      <div class="slds-text-color_weak slds-m-top_x-small">
+                        By {u.createdByName}
+                        <template if:true={u.visibleToCustomer}>
+                          • Visible to Customer
+                        </template>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+              </template>
+            </ul>
+          </template>
+
+          <template if:false={hasUpdates}>
+            <div class="slds-text-color_weak">No updates yet.</div>
+          </template>
+        </div>
+      </template>
+    </div>
+
+    <!-- Modal -->
+    <template if:true={isModalOpen}>
+      <c-case-workspace-update-modal
+        record-id={recordId}
+        mode={modalMode}
+        onclose={closeModal}
+        onsuccess={handleModalSuccess}
+        onescalatesubmit={handleEscalateSubmit}
+      ></c-case-workspace-update-modal>
+    </template>
+  </lightning-card>
+</template>

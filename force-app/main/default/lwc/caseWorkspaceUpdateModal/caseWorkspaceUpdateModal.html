@@ -1,0 +1,77 @@
+<template>
+  <section role="dialog" tabindex="-1" aria-modal="true" class="slds-modal slds-fade-in-open">
+    <div class="slds-modal__container">
+      <header class="slds-modal__header">
+        <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={close}>
+          <lightning-icon icon-name="utility:close" alternative-text="Close" size="small"></lightning-icon>
+        </button>
+        <h2 class="slds-text-heading_medium">{title}</h2>
+      </header>
+
+      <div class="slds-modal__content slds-p-around_medium">
+        <template if:true={isUpdate}>
+          <lightning-combobox
+            name="updateType"
+            label="Update Type"
+            value={updateType}
+            options={updateTypeOptions}
+            onchange={handleChange}
+          ></lightning-combobox>
+
+          <lightning-input
+            class="slds-m-top_small"
+            name="summary"
+            label="Summary"
+            value={summary}
+            onchange={handleChange}
+          ></lightning-input>
+
+          <lightning-textarea
+            class="slds-m-top_small"
+            name="details"
+            label="Details"
+            value={details}
+            onchange={handleChange}
+          ></lightning-textarea>
+
+          <lightning-input
+            class="slds-m-top_small"
+            type="checkbox"
+            name="visibleToCustomer"
+            label="Visible to Customer"
+            checked={visibleToCustomer}
+            onchange={handleChange}
+          ></lightning-input>
+        </template>
+
+        <template if:true={isEscalate}>
+          <lightning-textarea
+            name="reason"
+            label="Reason"
+            value={reason}
+            onchange={handleChange}
+          ></lightning-textarea>
+          <div class="slds-text-color_weak slds-m-top_x-small">
+            This will set Priority to High and create an Escalation update.
+          </div>
+        </template>
+
+        <template if:true={isSaving}>
+          <lightning-spinner alternative-text="Saving" size="small"></lightning-spinner>
+        </template>
+      </div>
+
+      <footer class="slds-modal__footer">
+        <lightning-button variant="neutral" label="Cancel" onclick={close}></lightning-button>
+        <lightning-button
+          class="slds-m-left_small"
+          variant="brand"
+          label="Save"
+          onclick={handleSave}
+          disabled={isSaving}
+        ></lightning-button>
+      </footer>
+    </div>
+  </section>
+  <div class="slds-backdrop slds-backdrop_open"></div>
+</template>
