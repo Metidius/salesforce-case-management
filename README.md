@@ -71,9 +71,9 @@ method_given_condition_when_action_then_result
 
 ## Running Locally
 
-sf org login web
-sf project deploy start
-sf apex run test --result-format human --synchronous
+- sf org login web
+- sf project deploy start
+- sf apex run test --result-format human --synchronous
 
 ---
 
