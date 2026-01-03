@@ -6,11 +6,19 @@ This repository is intended as a **code-quality portfolio**, not a Trailhead dem
 
 ---
 
+## 🎥 Demo Video
+
+A short walkthrough of the architecture, service layer, and testing strategy:
+
+👉 https://www.loom.com/share/e2ea7b8771e54bafa835834dbe273275
+
+---
+
 ## What This Project Demonstrates
 
 - Clean separation of concerns (Controller → Service → Selectors)
 - Service-layer business logic (no SOQL/DML in controllers)
-- `fflib_SObjectUnitOfWork` for transactional consistency
+- `fflib_SObjectUnitOfWork` for transactional  onsistency
 - Explicit DTOs instead of exposing SObjects to the UI
 - Dependency injection with `fflib_ApexMocks`
 - Behaviour-driven unit tests (not coverage-only tests)
